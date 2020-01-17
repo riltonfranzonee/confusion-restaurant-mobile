@@ -2,6 +2,8 @@ import React from 'react'
 import Menu from './MenuComponent'
 import Home from './HomeComponent'
 import Dishdetail from './DishDetailComponent'
+import Contact from './ContactComponent'
+import About from './AboutComponent'
 import {View, Platform} from 'react-native'
 import {createStackNavigator, createDrawerNavigator} from 'react-navigation'
 import Constants from 'expo-constants';
@@ -37,6 +39,36 @@ const HomeNavigator  = createStackNavigator({
     }
 })
 
+const ContactNavigator = createStackNavigator({
+    Contact: {screen: Contact},
+},{
+    navigationOptions:{
+        headerStyle:{
+            backgroundColor: '#512da8'
+        },
+        headerTintColor: '#fff',
+        headerTItleStyle:{
+            color: '#fff'
+        }
+    }
+})
+
+const AboutNavigator = createStackNavigator({
+    About: {screen: About},
+},{
+    navigationOptions:{
+        headerStyle:{
+            backgroundColor: '#512da8'
+        },
+        headerTintColor: '#fff',
+        headerTItleStyle:{
+            color: '#fff'
+        }
+    }
+})
+
+
+
 const MainNavigator = createDrawerNavigator({
     Home: {
         screen: HomeNavigator,
@@ -50,6 +82,20 @@ const MainNavigator = createDrawerNavigator({
         navigationOptions:{
             title: 'Menu',
             drawerLabel: 'Menu'
+        }
+    },
+    Contact:{
+        screen: ContactNavigator,
+        navigationOptions:{
+            title: 'Contact Us',
+            drawerLabel: 'Contact us'
+        }
+    },
+    About: {
+        screen: AboutNavigator,
+        navigationOptions:{
+            title: 'About Us',
+            drawerLabel: 'About us'
         }
     }
 },{
