@@ -154,3 +154,40 @@ export const addFavorite = dishId => ({
     type: ActionTypes.ADD_FAVORITE,
     payload: dishId
 })
+
+export const postComment = (comment) => dispatch => {
+   const newComment = {
+        dishId: comment.dishId,
+        rating: comment.rating,
+        author: comment.author,
+        comment: comment.comment
+    }
+    newComment.date = new Date().toISOString()
+
+    console.log(newComment)
+     return fetch(baseUrl + 'comments',{
+         method: 'POST',
+         body: JSON.stringify(newComment),
+         headers: {
+             'Content-Type': 'application/json'
+         },
+         credentials: 'same-origin'
+     })
+     .then(response => response.json())
+     .then(response => {
+         setTimeout(() => {
+             console.log(response)
+             dispatch(addComment(response))
+         }, 2000)
+     })
+     .catch(error => {console.log('Post Comments ', error.message)
+     alert('Your comment could not be posted\nError: ' + error.message)})
+    
+}
+
+
+
+export const addComment = comment => ({
+    type: ActionTypes.ADD_COMMENT,
+    payload: comment
+})
