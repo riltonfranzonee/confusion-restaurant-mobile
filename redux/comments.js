@@ -5,7 +5,7 @@ const initialState = {
     comments: []
 }
 
-export const comments = (state = initialState, action) => {
+export const comments = (state = { errMess: null, comments:[]}, action) => {
     switch(action.type){
         case ActionTypes.ADD_COMMENTS:
             return{...state, errMess: null, comments: action.payload}

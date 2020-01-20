@@ -1,7 +1,7 @@
 import React from 'react'
 import Menu from './MenuComponent'
 import Home from './HomeComponent'
-import Dishdetail from './DishDetailComponent'
+import DishDetail from './DishDetailComponent'
 import Contact from './ContactComponent'
 import About from './AboutComponent'
 import Reservation from './ReservationComponent'
@@ -9,18 +9,35 @@ import {View, Platform, StyleSheet, ScrollView, Image, Text} from 'react-native'
 import {createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView} from 'react-navigation'
 import Constants from 'expo-constants';
 import { Icon } from 'react-native-elements'
+import { connect } from 'react-redux';
+import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  fetchDishes: () => dispatch(fetchDishes()),
+  fetchComments: () => dispatch(fetchComments()),
+  fetchPromos: () => dispatch(fetchPromos()),
+  fetchLeaders: () => dispatch(fetchLeaders()),
+})
 
 
 const MenuNavigator = createStackNavigator({
-    Menu: {screen: Menu,
+    Menu: {screen: () => <Menu/>,
         navigationOptions:({navigation}) => ({
             headerLeft: <View style={{marginLeft:10}}>
                             <Icon name='menu' size={30} color='white' onPress={() => navigation.toggleDrawer()} />
                         </View>
         }) 
         },
-    Dishdetail: {screen: Dishdetail}
+    DishDetail: {screen: () => <DishDetail/>}
 },{
     initialRouteName: 'Menu',
     navigationOptions:{
@@ -35,7 +52,7 @@ const MenuNavigator = createStackNavigator({
 })
 
 const HomeNavigator  = createStackNavigator({
-    Home: {screen: Home},
+    Home: {screen: () => <Home/>},
 },{
     navigationOptions: ({navigation}) =>({
         
@@ -53,7 +70,7 @@ const HomeNavigator  = createStackNavigator({
 })
 
 const ContactNavigator = createStackNavigator({
-    Contact: {screen: Contact},
+    Contact: {screen: () => <Contact/>},
 },{
     navigationOptions: ({navigation}) =>({
         headerStyle:{
@@ -70,7 +87,7 @@ const ContactNavigator = createStackNavigator({
 })
 
 const AboutNavigator = createStackNavigator({
-    About: {screen: About},
+    About: {screen: () => <About/>},
 },{
     navigationOptions:  ({navigation}) =>({
         headerStyle:{
@@ -87,7 +104,7 @@ const AboutNavigator = createStackNavigator({
 })
 
 const ReservationNavigator = createStackNavigator({
-    Reservation: {screen: Reservation},
+    Reservation: {screen: () => <Reservation/>},
 },{
     navigationOptions: ({navigation}) =>({
         headerStyle:{
@@ -172,7 +189,14 @@ const MainNavigator = createDrawerNavigator({
 })
 
 
-export default class Main extends React.Component{ 
+ class Main extends React.Component{ 
+
+    componentDidMount(){
+        this.props.fetchDishes()
+        this.props.fetchComments()
+        this.props.fetchPromos()
+        this.props.fetchLeaders()
+    }
    
     static navigationOptions = {
         title: 'Menu'
@@ -209,3 +233,5 @@ const styles = StyleSheet.create({
         height: 60
     }
 })
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
