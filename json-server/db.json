@@ -225,6 +225,14 @@
       "comment": "The best dish in town!!",
       "date": "2020-01-20T23:47:50.882Z",
       "id": 31
+    },
+    {
+      "dishId": 0,
+      "rating": 2,
+      "author": "Antonio Jobim",
+      "comment": "I prefer sushi",
+      "date": "2020-01-21T01:55:54.976Z",
+      "id": 32
     }
   ],
   "promotions": [
