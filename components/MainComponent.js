@@ -5,6 +5,7 @@ import DishDetail from './DishDetailComponent'
 import Contact from './ContactComponent'
 import About from './AboutComponent'
 import Reservation from './ReservationComponent'
+import Favorites from './FavoriteComponent'
 import {View, Platform, StyleSheet, ScrollView, Image, Text} from 'react-native'
 import {createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView} from 'react-navigation'
 import Constants from 'expo-constants';
@@ -147,6 +148,28 @@ const ReservationNavigator = createStackNavigator({
         })
     });
 
+    const FavoritesNavigator = createStackNavigator({
+    Favorites: { screen: Favorites }
+}, {
+        navigationOptions: ({ navigation }) => ({
+            headerStyle: {
+                backgroundColor: "#512DA8"
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+                color: "#fff"
+            },
+            headerLeft: <View style={{marginLeft: 12}}>
+                            <Icon
+                                name='menu'
+                                size={28}
+                                color='white'
+                                onPress={() => navigation.toggleDrawer()}
+                            />
+                        </View>
+        })
+    });
+
 const CustomDrawerContentComponent = props => (
     <ScrollView>
         <SafeAreaView style={styles.container} forceInset={{top: 'always', horizontal: 'never'}}>
@@ -198,6 +221,14 @@ const MainNavigator = createDrawerNavigator({
             title: 'About Us',
             drawerLabel: 'About us',
             drawerIcon: ({tintColor}) => (<Icon name='info-circle' type='font-awesome' size={24} color={tintColor} />)
+        }
+    }, Favorites:{
+        screen: FavoritesNavigator,
+        navigationOptions:{
+            title: 'My Favorites',
+            drawerLabel: 'My Favorites',
+            drawerIcon: ({tintColor}) => (<Icon name='heart' type='font-awesome' size={24} color={tintColor} />)
+            
         }
     },
     Reservation:{
