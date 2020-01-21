@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, ScrollView, FlatList, StyleSheet, Modal, TouchableOpacity} from 'react-native'
+import {View, Text, ScrollView, FlatList, StyleSheet, Modal, TouchableOpacity, PanResponder} from 'react-native'
 import {Card, Icon, Input} from 'react-native-elements'
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import Constants from 'expo-constants'
@@ -26,10 +26,30 @@ const mapDispatchToProps = dispatch =>  ({
 function RenderDish(props){
     const dish = props.dish
 
+    const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
+        if ( dx > 50 )
+            return true;
+        else
+            return false;
+    }
+
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: (e, gestureState) => {
+            return true;
+        },
+        onPanResponderEnd: (e, gestureState) => {
+            console.log("pan responder end", gestureState);
+            if (recognizeDrag(gestureState))
+                 props.toggleModal()
+            return true;
+        }
+    })
+    
+
     if(dish != null){
         return(
             <>
-            <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+            <Animatable.View animation='fadeInDown' duration={2000} delay={1000} {...panResponder.panHandlers}>
                 <Card
                 featuredTitle={dish.name}
                 image={{uri: baseUrl + dish.image}}
