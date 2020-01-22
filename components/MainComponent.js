@@ -7,7 +7,8 @@ import About from './AboutComponent'
 import Reservation from './ReservationComponent'
 import Favorites from './FavoriteComponent'
 import Login from './LoginComponent'
-import {View, Platform, StyleSheet, ScrollView, Image, Text} from 'react-native'
+import {View, Platform, StyleSheet, ScrollView, Image, Text, ToastAndroid} from 'react-native'
+import NetInfo from "@react-native-community/netinfo";
 import {createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView} from 'react-navigation'
 import Constants from 'expo-constants';
 import { Icon } from 'react-native-elements'
@@ -286,7 +287,38 @@ const MainNavigator = createDrawerNavigator({
         this.props.fetchComments()
         this.props.fetchPromos()
         this.props.fetchLeaders()
-    }
+//   NetInfo.fetch()
+//         .then(state => {
+//             ToastAndroid.show('Initial Network Connectivity Type: '
+//                 + state.type,
+//                 ToastAndroid.LONG)
+//         });
+
+//     NetInfo.addEventListener('connectionChange', this.handleConnectivityChange);
+//   }
+
+//   componentWillUnmount() {
+//     NetInfo.removeEventListener('connectionChange', this.handleConnectivityChange);
+ }
+
+    // handleConnectivityChange = connectionInfo => {
+    //     switch (connectionInfo.type) {
+    //         case 'none':
+    //             ToastAndroid.show('You are now offline!', ToastAndroid.LONG)
+    //             break
+    //         case 'wifi':
+    //             ToastAndroid.show('You are now connected to wifi!', ToastAndroid.LONG)
+    //             break
+    //         case 'cellular':
+    //             ToastAndroid.show('You are now connected to cellular!', ToastAndroid.LONG)
+    //             break
+    //         case 'unknown':
+    //             ToastAndroid.show('You have an uknown connection!', ToastAndroid.LONG)
+    //             break
+    //         default:
+    //             break;
+    //     }
+    // }
    
     static navigationOptions = {
         title: 'Menu'

@@ -110,6 +110,21 @@ class RegisterTab extends React.Component {
 
     }
 
+    getImageFromGallery = async () => {
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+
+        if(cameraRollPermission.status === 'granted'){
+            let chosenImage = await ImagePicker.launchImageLibraryAsync({
+                    allowsEditing: true,
+                    aspect: [4,3]
+            })
+            if(!chosenImage.cancelled){
+                this.processImage(chosenImage.uri)
+            }
+        }
+
+    }
+
     processImage = async (imageUri) => {
         let processImage = await ImageManipulator.manipulateAsync(
             imageUri,
@@ -143,10 +158,10 @@ class RegisterTab extends React.Component {
                     loadingIndicatorSource={require('./images/logo.png')}
                     style={styles.image}
                     />
-                    <TouchableOpacity style={styles.btnCamera}onPress={this.getImageFromCamera}>
+                    <TouchableOpacity style={styles.btnCamera} onPress={this.getImageFromCamera}>
                         <Icon type='font-awesome' name='camera' color='#512da8' size={18}/><Text style={[styles.btnText, styles.cameraText]}>Camera</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnCamera}onPress={this.getImageFromCamera}>
+                    <TouchableOpacity style={styles.btnCamera} onPress={this.getImageFromGallery}>
                         <Icon type='font-awesome' name='image' color='#512da8' size={18}/><Text style={[styles.btnText, styles.cameraText]}>Gallery</Text>
                     </TouchableOpacity>
                 </View>

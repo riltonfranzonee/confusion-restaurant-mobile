@@ -5,8 +5,9 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Constants from 'expo-constants'
 import * as Animatable from 'react-native-animatable'
 import  * as Permissions  from 'expo-permissions'
+import * as Calendar from 'expo-calendar';
 import { Notifications } from 'expo'
-
+var moment = require('moment');
 export default class Reservation extends React.Component{
 
     state={
@@ -25,8 +26,7 @@ export default class Reservation extends React.Component{
     }
 
     handleReservation = () => {
-        console.log(JSON.stringify(this.state))
-        this.toggleModal()
+        this.addReservationToCalendar(this.state.date)
     }
 
     resetForm = () => { 
@@ -49,6 +49,7 @@ export default class Reservation extends React.Component{
         return permission
     }
 
+
     async presentLocalNotification(date){
         await this.obtainNotificationPermission()
         Notifications.presentLocalNotificationAsync({
@@ -64,7 +65,42 @@ export default class Reservation extends React.Component{
             }
         })
     }
-      
+
+    
+    async obtainCalendarPermission(){
+        let permission = await Permissions.getAsync(Permissions.CALENDAR)
+        if(permission.status !== 'granted'){
+            permission = await Permissions.askAsync(Permissions.CALENDAR)
+            if(permission.status !== 'granted'){
+                Alert.alert('Permission not granted to access calendar')
+            }
+        }
+        return permission
+    }
+    
+   async addReservationToCalendar(date){
+        await this.obtainCalendarPermission()
+        const calendars = await Calendar.getCalendarsAsync();
+        const calendar = calendars.find(({allowsModifications})=>allowsModifications);
+
+        let startDate = new Date(Date.parse(date))
+        let endDate = new Date(Date.parse(date) + (2*60*60*1000))
+
+        console.log(startDate)
+
+        //I NEED TO FIX THE DATE 
+        const details = {
+            title: 'Con Fusion Table Reservation', 
+            startDate: startDate,
+            endDate: endDate,
+            timeZone: 'Asia/Hong_Kong',
+            location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+
+        }
+        Calendar.createEventAsync(calendar.id, details)
+        
+    }
+
     render(){
 
     const showDatePicker = () => {
@@ -81,6 +117,7 @@ export default class Reservation extends React.Component{
 
      const handleConfirm = date => {
         console.warn("A date has been picked: ", date)
+        console.log(date)
         this.setState({date: date})
         hideDatePicker();
       };
@@ -134,7 +171,7 @@ export default class Reservation extends React.Component{
                                 },
                                 {
                                     text: 'OK',
-                                    onPress: () => {this.presentLocalNotification(this.state.date), this.resetForm()}
+                                    onPress: () => {this.presentLocalNotification(this.state.date), this.handleReservation()}
                                 }
                             ],
                             { cancelable: false }
