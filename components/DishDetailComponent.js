@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, ScrollView, FlatList, StyleSheet, Modal, TouchableOpacity, PanResponder} from 'react-native'
+import {View, Text, ScrollView, FlatList, StyleSheet, Modal, TouchableOpacity, PanResponder, Share} from 'react-native'
 import {Card, Icon, Input} from 'react-native-elements'
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import Constants from 'expo-constants'
@@ -45,6 +45,16 @@ function RenderDish(props){
         }
     })
     
+    const shareDish = (title, message, url) => {
+        Share.share({
+            title,
+            message: title+ ': ' + message + ' ' + url,
+            url
+        },{
+            dialogTitle: 'Share ' + title
+        })
+    }
+
 
     if(dish != null){
         return(
@@ -62,6 +72,8 @@ function RenderDish(props){
                         onPress={() => props.favorite ? console.log('already favorite') : props.onPress() }/>
                         <Icon raised reverse name='pencil' type='font-awesome' color='#512DA8'
                         onPress={() => props.toggleModal() }/>
+                        <Icon raised reverse name='share' type='font-awesome' color='#51d2a8'
+                        onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image) }/>
                     </View>
                 </Card>
             </Animatable.View>
